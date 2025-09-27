@@ -1,0 +1,87 @@
+FROM openjdk:11-jdk
+MAINTAINER Anil
+LABEL env=production
+ENV jenkins-app /data/app
+RUN mkdir -p $jenkins-app
+ADD https://get.jenkins.io/war/2.397/jenkins.war $jenkins-app
+WORKDIR $jenkins-app
+EXPOSE 8080
+CMD ["java","-jar","jenkins.war"]
+
+
+---
+FROM ubuntu:latest
+
+LABEL name="anil"
+LABEL desc="this d f is used to deploy app"
+
+ENV varname="ram"
+ENV varpass="1234"
+
+RUN apt-get update -y && apt-get install nginx -y && apt-get clean
+EXPOSE 80
+
+CMD ["nginx" , "-g" , "daemon off;"]
+---
+
+
+
+
+ # Use the official Nginx image
+FROM nginx:latest
+
+# Copy the HTML file to the default Nginx directory
+COPY index.html /usr/share/nginx/html/index.html
+#OR COPY . /USR/SHARE/NGINX/HTML/INDEX.HTML
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
+
+---
+
+	                            
+# daemon on   :- (default) Runs Nginx in the background (not suitable for Docker bcz container run and exit suddenly)
+
+# daemon off	:-  Runs Nginx in the foreground, keeping the container running
+
+---
+    # Use the official Apache image
+FROM httpd:latest
+
+LABEL decs="deploy html app"
+LABEL name="anil"
+
+
+# Copy the HTML file to Apache's web directory
+COPY index.html /usr/local/apache2/htdocs/index.html
+
+# Expose port 80
+EXPOSE 80
+
+# Start Apache
+CMD ["httpd", "-D", "FOREGROUND"]
+---
+
+
+# # Use the official Nginx image
+# FROM nginx:latest
+
+# # Set the working directory
+# #WORKDIR /usr/share/nginx/html/
+# # Download  the  Best-Jewellery-Collection HTML template 
+# ADD  https://www.free-css.com/assets/files/free-css-templates/download/page296/healet.zip  /opt
+
+# #  extract the HTML template
+# RUN apt-get update && apt-get install -y  unzip
+# RUN cd /opt && unzip healet.zip -d /opt && cd /opt/healet-html/ && cp -rvf /opt/healet-html/*  /usr/share/nginx/html
+# RUN chmod -R 755 /usr/share/nginx/html/
+
+
+# # Expose port 80
+# EXPOSE 80
+
+# # Start Nginx
+# CMD ["nginx", "-g", "daemon off;"]
+
