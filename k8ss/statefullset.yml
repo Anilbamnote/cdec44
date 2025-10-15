@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefullSet
+metadata:
+  name: my-ss
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ss-app
+
+  template:
+    metadata:
+      labels:
+        app: ss-app
+    spec:
+      containers:
+        - name: ss-container
+          image: httpd:latest
+          ports:
+            - containerPort: 80
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: my-ss
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ss-app
+  serviceName: "my-service"
+  template:
+    metadata:
+      labels:
+        app: ss-app
+    spec:
+      containers:
+        - name: ss-container
+          image: httpd:latest
+          ports:
+            - containerPort: 80
+            

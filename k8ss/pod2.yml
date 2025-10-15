@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: my-pod
+  labels:
+    app: my-app
+  namespace: prod
+spec:
+  containers:
+    - name: httpd
+      image: httpd:latest
+      ports:
+        - containerPort: 80
+          name: http
+        - containerPort: 443
+          name: https
+    - name: tomcat
+      image: tomcat
+      ports:
+        - name: java
+          containerPort: 8080

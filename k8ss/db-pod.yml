@@ -1,0 +1,161 @@
+
+apiVersion: v1 
+kind: Pod 
+metadata:
+  name: my-db-pod
+  labels:
+    app: my-db-app
+spec:
+  containers: 
+      - name: my-sql
+        image: mysql 
+        ports: 
+        - name: mysql 
+            containerPort: 3306
+        env: 
+          - name: MYSQL_ROOT_PASSWORD
+            value: redhat
+
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-db-pod
+  labels:
+    app: my-db-app
+spec:
+  containers:
+    - name: my-sql
+      image: mysql:latest
+      ports:
+        - name: mysql
+          containerPort: 3306
+      env:
+        - name: MYSQL_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: my-vars
+              key: DB_NAME 
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: my-vars
+              key: DB_PASSWORD
+        - name: MYSQL_USER_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: my-vars
+              key: DB_USER
+
+            
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-db-pod
+  labels:
+    app: my-db-app
+spec:
+  containers:
+    - name: my-sql
+      image: mysql:latest
+      ports:
+        - name: mysql
+          containerPort: 3306
+      env:
+        - name: MYSQL_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: my-vars
+              key: DB_NAME 
+
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: my-cred
+              key: DB_PASSWORD
+
+        - name: MYSQL_USER_NAME
+          valueFrom:
+            secretKeyRef:
+              name: my-cred
+              key: DB_USER
+
+
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: mysql-app
+  name: mysql-app
+spec:
+  containers:
+    - name: mysql-app
+      image: mysql
+      ports:
+      - name: mysql
+        containerPort: 3306
+      env:
+      #   - name: MYSQL_ROOT_PASSWORD
+      #     value: redhat
+      #   - name: MYSQL_USER_NAME
+      #     value: Anil
+      #   - name: DB_NAME
+      #     value: studentapp
+
+      - name: DB_NAME 
+        valueFrom:
+          configMapKeyRef:
+            name: my-vars
+            key: database_name
+
+      - name: MYSQL_ROOT_PASSWORD 
+        valueFrom:
+          configMapKeyRef:
+            name: my-cred
+            key: database_pass
+      - name: MYSQL_USER_NAME 
+        valueFrom:
+          configMapKeyRef:
+            name: my-cred
+            key: database_user
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-db-pod
+  labels:
+    app: my-db-app
+spec:
+  containers:
+    - name: my-sql
+      image: mysql:latest
+      ports:
+        - name: mysql
+          containerPort: 3306
+      env:
+        - name: MYSQL_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: my-vars
+              key: DB_NAME
+
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: my-vars
+              key: DB_PASSWORD
+        - name: MYSQL_USER_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: my-vars
+              key: DB_USER
+       

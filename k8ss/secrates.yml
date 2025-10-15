@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Secret
+metadata: 
+  name: my-sec
+data:
+  DB_USER: "QW5pbA=="       # Base64 encoded value of "Admin"
+  DB_PASSWORD: "UmVkaGF0"   # Base64 encoded value of "Redhat"
+  
+
+
+
+
+
+  ---
+
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: my-vars
+data:
+  DB_NAME: studentapp
+  DB_USER: Anil
+  DB_PASSWORD: "Redhat"
+
+
+  ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-cred
+data:
+  DB_PASSWORD: UmVkaGF0Cg==
+  DB_USER: QW5pbAo=
